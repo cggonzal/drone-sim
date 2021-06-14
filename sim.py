@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.integrate import solve_ivp
 from scipy.integrate import OdeSolution
-
+#
 def plot_results(sol: OdeSolution) -> None:
     # TODO plot results from sol
     return
