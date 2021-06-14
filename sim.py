@@ -19,9 +19,5 @@ time_end = 10
 
 #sol = solve_ivp(quad_model, [time_start, time_end], y0)
 
-import matplotlib.pyplot as plt
-plt.plot(range(10), range(10))
-plt.show()
-
 # TODO
 #plot_results(sol)
