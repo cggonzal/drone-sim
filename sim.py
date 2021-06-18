@@ -111,8 +111,8 @@ def get_v_dot(phi: float, theta: float, psi: float, phi_dot: float, theta_dot: f
 
 def get_n_dot_dot(X: np.ndarray, u: np.ndarray, I: np.ndarray, lift_constant: float, 
         motor_torque_constant: float, arm_length: float) -> np.ndarray:
-# X = [x, y, z, x_dot, y_dot, z_dot, phi, theta, psi, phi_dot, theta_dot, psi_dot]   
-# u = [T, t_phi, t_theta, t_psi]
+# X = [[x], [y], [z], [x_dot], [y_dot], [z_dot], [phi], [theta], [psi], [phi_dot], [theta_dot], [psi_dot]]
+# u = [[T], [t_phi], [t_theta], [t_psi]]
 # I = [[I_xx, 0, 0], [0, I_yy, 0], [0, 0, I_zz]]
     phi = X[6, 0]
     theta = X[7, 0]
@@ -140,8 +140,8 @@ def get_n_dot_dot(X: np.ndarray, u: np.ndarray, I: np.ndarray, lift_constant: fl
     return n_dot_dot
 
 def get_epsilon_dot_dot(X: np.ndarray, u: np.ndarray, m: float) -> np.ndarray:
-# X = [x, y, z, x_dot, y_dot, z_dot, phi, theta, psi, phi_dot, theta_dot, psi_dot]
-# u = [T, t_phi, t_theta, t_psi]
+# X = [[x], [y], [z], [x_dot], [y_dot], [z_dot], [phi], [theta], [psi], [phi_dot], [theta_dot], [psi_dot]]
+# u = [[T], [t_phi], [t_theta], [t_psi]]
 # m = mass of quad
     g = -9.81
     T = u[0 ,0]
@@ -158,10 +158,11 @@ def get_epsilon_dot_dot(X: np.ndarray, u: np.ndarray, m: float) -> np.ndarray:
     epsilon_dot_dot = np.array([[x_dot_dot], [y_dot_dot], [z_dot_dot]])
     return epsilon_dot_dot
 
-def quad_model(t: np.ndarray, X: np.ndarray): 
+def quad_model(t: np.float64, X: np.ndarray): 
 # reference https://sal.aalto.fi/publications/pdf-files/eluu11_public.pdf
 # input state: 
 # X = [[x], [y], [z], [x_dot], [y_dot], [z_dot], [phi], [theta], [psi], [phi_dot], [theta_dot], [psi_dot]]
+# u = [[T], [tau_phi], [tau_theta], [tau_psi]]
 
 #output state: 
 #X_dot = [[x_dot], [y_dot], [z_dot], [x_dot_dot], [y_dot_dot], [z_dot_dot], [phi_dot], [theta_dot], [psi_dot], [phi_dot_dot], [theta_dot_dot], [psi_dot_dot]]
@@ -214,6 +215,7 @@ time_end = 10
 y0 = np.array([0] * 12)
 
 sol = solve_ivp(quad_model, [time_start, time_end], y0, vectorized=True)
+print("time stamps:", sol.t)
 
 # TODO
 #plot_results(sol)
