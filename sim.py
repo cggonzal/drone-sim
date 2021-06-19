@@ -1,10 +1,24 @@
 import numpy as np
 from scipy.integrate import solve_ivp
-from scipy.integrate import OdeSolution
+from typing import Any
+import matplotlib.pyplot as plt
 
-def plot_results(sol: OdeSolution) -> None:
+def plot_results(sol: Any) -> None:
     # TODO plot results from sol
-    return
+    final_t = sol.t[-1]
+    num_points = 100
+
+    t = np.linspace(0, final_t, num_points)
+    z = sol.sol(t)
+    print("z shape is:", z.shape)
+    
+    plt.plot(t, z[2, :])    
+    plt.xlabel("time(s)")
+    plt.ylabel("z axis(m)")
+    
+    path = "/mnt/c/Users/gonza/Desktop/figure.png"
+    plt.savefig(path)
+    print("saved figure to path:", path)
 
 def get_W_minus_one_n_derivative(phi: float, theta: float, psi: float, 
         phi_dot: float, theta_dot: float, psi_dot: float) -> np.ndarray:
@@ -214,8 +228,8 @@ time_end = 10
 # But the value that gets passed into quad_model will have shape (12,1)
 y0 = np.array([0] * 12)
 
-sol = solve_ivp(quad_model, [time_start, time_end], y0, vectorized=True)
+sol = solve_ivp(quad_model, [time_start, time_end], y0, vectorized = True, dense_output = True)
 print("time stamps:", sol.t)
-
-# TODO
-#plot_results(sol)
+print("type of sol:", type(sol))
+print("type of sol:", type(sol.sol))
+plot_results(sol)
