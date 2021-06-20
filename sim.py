@@ -10,7 +10,6 @@ def plot_results(sol: Any) -> None:
 
     t = np.linspace(0, final_t, num_points)
     z = sol.sol(t)
-    print("z shape is:", z.shape)
     
     plt.plot(t, z[2, :])    
     plt.xlabel("time(s)")
@@ -181,7 +180,7 @@ def quad_model(t: np.float64, X: np.ndarray, u: np.ndarray, mass: float):
 #output state: 
 #X_dot = [[x_dot], [y_dot], [z_dot], [x_dot_dot], [y_dot_dot], [z_dot_dot], [phi_dot], [theta_dot], [psi_dot], [phi_dot_dot], [theta_dot_dot], [psi_dot_dot]]
     assert(X.shape == (12,1))
-
+    
     mass = 1
     I = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
     lift_constant = 1
@@ -201,7 +200,7 @@ def quad_model(t: np.float64, X: np.ndarray, u: np.ndarray, mass: float):
     theta_dot = X[10, 0]
     psi_dot = X[11, 0]
     
-    epsilon_dot_dot = get_epsilon_dot_dot(X, u, m)
+    epsilon_dot_dot = get_epsilon_dot_dot(X, u, mass)
     n_dot_dot = get_n_dot_dot(X, u, I, lift_constant, motor_torque_constant, arm_length)
     
     X_dot = np.zeros((12, 1))
