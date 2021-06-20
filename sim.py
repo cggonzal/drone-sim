@@ -172,7 +172,7 @@ def get_epsilon_dot_dot(X: np.ndarray, u: np.ndarray, m: float) -> np.ndarray:
     epsilon_dot_dot = np.array([[x_dot_dot], [y_dot_dot], [z_dot_dot]])
     return epsilon_dot_dot
 
-def quad_model(t: np.float64, X: np.ndarray): 
+def quad_model(t: np.float64, X: np.ndarray, u: np.ndarray, mass: float): 
 # reference https://sal.aalto.fi/publications/pdf-files/eluu11_public.pdf
 # input state: 
 # X = [[x], [y], [z], [x_dot], [y_dot], [z_dot], [phi], [theta], [psi], [phi_dot], [theta_dot], [psi_dot]]
@@ -182,9 +182,8 @@ def quad_model(t: np.float64, X: np.ndarray):
 #X_dot = [[x_dot], [y_dot], [z_dot], [x_dot_dot], [y_dot_dot], [z_dot_dot], [phi_dot], [theta_dot], [psi_dot], [phi_dot_dot], [theta_dot_dot], [psi_dot_dot]]
     assert(X.shape == (12,1))
 
-    m = 1
+    mass = 1
     I = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
-    u = np.array([[0], [0], [0], [0]]) # TODO make u be passed in as a variable to quad_model
     lift_constant = 1
     motor_torque_constant = 1
     arm_length = 1
@@ -228,8 +227,12 @@ time_end = 10
 # But the value that gets passed into quad_model will have shape (12,1)
 y0 = np.array([0] * 12)
 
-sol = solve_ivp(quad_model, [time_start, time_end], y0, vectorized = True, dense_output = True)
-print("time stamps:", sol.t)
-print("type of sol:", type(sol))
-print("type of sol:", type(sol.sol))
+# NOTE: "u" can be a 4 x N matrix where column i is the control input at time step i and each column is: [[T], [tau_phi], [tau_theta], [tau_psi]]
+u = np.array([[0], [0], [0], [0]]) 
+
+# tuple of arguments that get passed to quad_model. Add arguments as needed
+args = (u, 1)
+
+sol = solve_ivp(quad_model, [time_start, time_end], y0, vectorized = True, dense_output = True, args = args)
+
 plot_results(sol)
