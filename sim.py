@@ -4,7 +4,6 @@ from typing import Any
 import matplotlib.pyplot as plt
 
 def plot_results(sol: Any) -> None:
-    # TODO plot results from sol
     final_t = sol.t[-1]
     num_points = 100
 
@@ -66,7 +65,7 @@ def get_W_minus_one_n(phi:float, theta:float, psi:float) -> np.ndarray:
 def get_u_from_omega(omega: np.ndarray, lift_constant: float, motor_torque_constant: float, 
                      arm_length: float) -> np.ndarray:
     # NOTE: counter-clockwise torque is positive, clockwise torque is negative
-    # equations (7) and (8) # 
+    # equations (7) and (8)
     motor_matrix_to_u_from_omega = np.array([[lift_constant, lift_constant, lift_constant, lift_constant],
                                              [0, -lift_constant * arm_length, 0, lift_constant * arm_length], 
                                              [-lift_constant * arm_length, 0, lift_constant * arm_length, 0], 
@@ -171,7 +170,7 @@ def get_epsilon_dot_dot(X: np.ndarray, u: np.ndarray, m: float) -> np.ndarray:
     epsilon_dot_dot = np.array([[x_dot_dot], [y_dot_dot], [z_dot_dot]])
     return epsilon_dot_dot
 
-def quad_model(t: np.float64, X: np.ndarray, u: np.ndarray, mass: float): 
+def quad_model(t: np.float64, X: np.ndarray, u: np.ndarray, mass: float) -> np.ndarray: 
 # reference https://sal.aalto.fi/publications/pdf-files/eluu11_public.pdf
 # input state: 
 # X = [[x], [y], [z], [x_dot], [y_dot], [z_dot], [phi], [theta], [psi], [phi_dot], [theta_dot], [psi_dot]]
