@@ -85,19 +85,11 @@ def get_omega_from_u(u: np.ndarray, lift_constant: float, motor_torque_constant:
 
     return np.sqrt(motor_matrix_to_omega_from_u @ u)
 
-def get_omega_tau(u: np.ndarray, lift_constant: float, motor_torque_constant: float, arm_length: float) -> float:
-    T = u[0, 0]
-    tau_phi = u[1, 0]
-    tau_theta = u[2, 0]
-    tau_psi = u[3, 0]
-    
-    omega = get_omega_from_u(u, lift_constant, motor_torque_constant, arm_length)
-    return omega[0, 0] - omega[1, 0] + omega[2, 0] - omega[3, 0]
 
 def get_v_dot(phi: float, theta: float, psi: float, phi_dot: float, theta_dot: float, 
         psi_dot: float, I: np.ndarray, u: np.ndarray, lift_constant: float, motor_torque_constant: float,
         arm_length: float) -> np.ndarray:
-    # equation (11)
+    # equation (11), assumes center of mass and body frame are aligned 
     I_xx = I[0, 0]
     I_yy = I[1, 1]
     I_zz = I[2, 2]
@@ -111,11 +103,10 @@ def get_v_dot(phi: float, theta: float, psi: float, phi_dot: float, theta_dot: f
     q = v[1, 0]
     r = v[2, 0]
     
-    omega_tau = get_omega_tau(u, lift_constant, motor_torque_constant, arm_length)
-    
-    p_dot = (I_yy - I_zz) * q * r / I_xx - I_xx * (q / I_xx) * omega_tau + tau_phi / I_xx
-    q_dot = (I_zz - I_xx) * p * r / I_yy - I_yy * (-p / I_yy) * omega_tau + tau_theta / I_yy
-    r_dot = (I_xx - I_yy) * p * q / I_zz - I_zz * 0 * omega_tau + tau_psi / I_zz
+    # NOTE gyroscopic force assumed to be zero 
+    p_dot = (I_yy - I_zz) * q * r / I_xx + tau_phi / I_xx
+    q_dot = (I_zz - I_xx) * p * r / I_yy + tau_theta / I_yy
+    r_dot = (I_xx - I_yy) * p * q / I_zz + tau_psi / I_zz
 
     v_dot = np.array([[p_dot], [q_dot], [r_dot]])
     
