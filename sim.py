@@ -2,7 +2,7 @@ import numpy as np
 from scipy.integrate import solve_ivp
 from typing import Any
 import matplotlib.pyplot as plt
-
+#
 def plot_results(sol: Any) -> None:
     final_t = sol.t[-1]
     num_points = 100
