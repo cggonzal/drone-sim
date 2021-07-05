@@ -14,7 +14,7 @@ def plot_results(sol: Any) -> None:
     plt.xlabel("time(s)")
     plt.ylabel("z axis(m)")
     
-    path = "/mnt/c/Users/gonza/Desktop/figure.png"
+    path = "/home/cgg/Desktop/figure.png"
     plt.savefig(path)
     print("saved figure to path:", path)
 
@@ -161,7 +161,7 @@ def get_epsilon_dot_dot(X: np.ndarray, u: np.ndarray, m: float) -> np.ndarray:
     epsilon_dot_dot = np.array([[x_dot_dot], [y_dot_dot], [z_dot_dot]])
     return epsilon_dot_dot
 
-def quad_model(t: np.float64, X: np.ndarray, u: np.ndarray, mass: float) -> np.ndarray: 
+def quad_model(t: np.float64, X: np.ndarray, u: np.ndarray) -> np.ndarray: 
 # reference https://sal.aalto.fi/publications/pdf-files/eluu11_public.pdf
 # input state: 
 # X = [[x], [y], [z], [x_dot], [y_dot], [z_dot], [phi], [theta], [psi], [phi_dot], [theta_dot], [psi_dot]]
