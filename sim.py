@@ -2,8 +2,8 @@ import numpy as np
 from scipy.integrate import solve_ivp
 from typing import Any
 import matplotlib.pyplot as plt
-#
-def plot_results(sol: Any) -> None:
+
+def plot_results(sol) -> None:
     final_t = sol.t[-1]
     num_points = 100
 
@@ -161,7 +161,7 @@ def get_epsilon_dot_dot(X: np.ndarray, u: np.ndarray, m: float) -> np.ndarray:
     epsilon_dot_dot = np.array([[x_dot_dot], [y_dot_dot], [z_dot_dot]])
     return epsilon_dot_dot
 
-def quad_model(t: np.float64, X: np.ndarray, u: np.ndarray) -> np.ndarray: 
+def quad_model(t: np.float64, X: np.ndarray, u: np.ndarray, *args) -> np.ndarray: 
 # reference https://sal.aalto.fi/publications/pdf-files/eluu11_public.pdf
 # input state: 
 # X = [[x], [y], [z], [x_dot], [y_dot], [z_dot], [phi], [theta], [psi], [phi_dot], [theta_dot], [psi_dot]]
