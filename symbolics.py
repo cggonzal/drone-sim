@@ -1,9 +1,11 @@
+# symbolic code that generates the model of a quadcopter 
+# see here for details: https://www.cggonzalez.com/blog/model.html
+
 from sympy import symbols, init_printing, Matrix, sin, cos, tan
 
 init_printing()
 
-# see here for model: https://www.cggonzalez.com/blog/model.html
-
+x, y, z = symbols("x y z")
 x_dot, y_dot, z_dot = symbols("x_dot y_dot z_dot")
 phi, theta, psi = symbols("phi theta psi")
 phi_dot, theta_dot, psi_dot = symbols("phi_dot theta_dot psi_dot")
@@ -40,7 +42,22 @@ body_to_world_transformation = Matrix([[1, sin(phi) * tan(theta), cos(phi) * tan
 attitude = nu_transformation * nu + body_to_world_transformation * nu_dot
 phi_dot_dot, theta_dot_dot, psi_dot_dot = attitude[0, 0], attitude[1, 0], attitude[2, 0]
 
-# final result
+X = Matrix([[x],
+            [y],
+            [z],
+            [phi],
+            [theta],
+            [psi],
+            [x_dot],
+            [y_dot],
+            [z_dot],
+            [phi_dot],
+            [theta_dot],
+            [psi_dot]])
+
+U = Matrix([[f_t], [tau_phi], [tau_theta], [tau_psi]])
+
+# final state space model, X_dot = F(X, U)
 X_dot = Matrix([[x_dot],
                 [y_dot],
                 [z_dot],
@@ -54,4 +71,8 @@ X_dot = Matrix([[x_dot],
                 [theta_dot_dot],
                 [psi_dot_dot]])
 
-print(X_dot[9, 0])
+#jacobians
+df_dx = X_dot.jacobian(X)
+df_du = X_dot.jacobian(U)
+
+print(df_du.shape)
